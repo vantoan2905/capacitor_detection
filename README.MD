@@ -22,7 +22,7 @@ Capacitor Detection is a deep learning-based project designed to identify and cl
 
 ### Clone the repository
 ```sh
-git clone https://github.com/your-repo/capacitor-detection.git
+git clone https://github.com/vantoan2905/capacitor_detection.git
 cd capacitor_detection
 ```
 

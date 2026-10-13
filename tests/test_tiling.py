@@ -3,7 +3,7 @@ import json
 import cv2
 import numpy as np
 
-from capacitor_detection.inference import merge_tile_detections, non_max_suppression
+from capacitor_detection.inference import merge_tile_detections, nms_indices, non_max_suppression
 from capacitor_detection.preprocessing.grid import build_grid, grid_to_quads, write_cell_csv
 from capacitor_detection.tiling import (
     fixed_overlap_tiles,
@@ -76,3 +76,10 @@ def test_merge_tile_detections_dedupes_overlap():
     detections = [(tiles[0], [[190, 10, 210, 30, 0.9]]), (tiles[1], [[10, 10, 30, 30, 0.6]])]
     merged = merge_tile_detections(detections, 600, 300)
     np.testing.assert_allclose(merged, [[190, 10, 210, 30, 0.9]])
+
+
+def test_nms_indices_per_class():
+    boxes = [[0, 0, 10, 10, 0.9], [1, 1, 11, 11, 0.8], [0, 0, 10, 10, 0.7]]
+    assert nms_indices(boxes).tolist() == [0]
+    assert nms_indices(boxes, classes=[0, 0, 1]).tolist() == [0, 2]
+    assert nms_indices([], classes=[]).tolist() == []

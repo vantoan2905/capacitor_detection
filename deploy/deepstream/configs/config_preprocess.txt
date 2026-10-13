@@ -1,0 +1,39 @@
+# nvdspreprocess: cut each 5472x3648 frame into the 9 "ratio" tiles used for training
+# (capacitor_detection.tiling.ratio_overlap_tiles) and build one batched tensor for nvinfer.
+# Regenerate roi-params-src-0 with gen_rois.py if the frame size or tiling changes.
+
+[property]
+enable=1
+target-unique-ids=1
+unique-id=5
+gpu-id=0
+process-on-frame=1
+network-input-order=0
+# batch = number of ROIs; H/W = YOLO imgsz (1337 rounded up to stride 32)
+network-input-shape=9;3;1344;1344
+processing-width=1344
+processing-height=1344
+maintain-aspect-ratio=1
+symmetric-padding=1
+# 0 = RGB, 0 = FP32
+network-color-format=0
+tensor-data-type=0
+# input layer name of the ONNX exported by DeepStream-Yolo
+tensor-name=input
+scaling-buf-pool-size=6
+tensor-buf-pool-size=6
+scaling-pool-memory-type=0
+scaling-pool-compute-hw=0
+scaling-filter=0
+custom-lib-path=/opt/nvidia/deepstream/deepstream/lib/gst-plugins/libcustom2d_preprocess.so
+custom-tensor-preparation-function=CustomTensorPreparation
+
+[user-configs]
+pixel-normalization-factor=0.003921568
+
+[group-0]
+src-ids=0
+process-on-roi=1
+custom-input-transformation-function=CustomAsyncTransformation
+# left;top;width;height per ROI
+roi-params-src-0=0;0;2006;1337;1642;0;2188;1337;3466;0;2006;1337;0;1095;2006;1458;1642;1095;2188;1458;3466;1095;2006;1458;0;2311;2006;1337;1642;2311;2188;1337;3466;2311;2006;1337;

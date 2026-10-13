@@ -15,11 +15,28 @@ def to_image_coords(boxes: np.ndarray, tile: Tile, width: int, height: int) -> n
     return boxes
 
 
+def nms_indices(boxes: np.ndarray, iou_threshold: float = 0.5, classes=None) -> np.ndarray:
+    """Indices of the ``(N, 5)`` ``x1, y1, x2, y2, score`` boxes kept by greedy NMS.
+
+    With ``classes`` (length ``N``), suppression only happens between boxes of the same class.
+    """
+    boxes = np.asarray(boxes, dtype=float).reshape(-1, 5)
+    if classes is None:
+        return _nms(boxes, iou_threshold)
+    classes = np.asarray(classes)
+    keep = [np.flatnonzero(classes == c)[_nms(boxes[classes == c], iou_threshold)] for c in np.unique(classes)]
+    return np.sort(np.concatenate(keep)) if keep else np.empty(0, dtype=int)
+
+
 def non_max_suppression(boxes: np.ndarray, iou_threshold: float = 0.5) -> np.ndarray:
     """Greedy NMS over ``(N, 5)`` ``x1, y1, x2, y2, score`` boxes; returns the kept boxes."""
     boxes = np.asarray(boxes, dtype=float).reshape(-1, 5)
+    return boxes[_nms(boxes, iou_threshold)]
+
+
+def _nms(boxes: np.ndarray, iou_threshold: float) -> np.ndarray:
     if len(boxes) == 0:
-        return boxes
+        return np.empty(0, dtype=int)
     x1, y1, x2, y2, scores = boxes.T
     areas = (x2 - x1 + 1) * (y2 - y1 + 1)
     order = scores.argsort()[::-1]
@@ -32,7 +49,7 @@ def non_max_suppression(boxes: np.ndarray, iou_threshold: float = 0.5) -> np.nda
         inter = w * h
         iou = inter / (areas[i] + areas[rest] - inter)
         order = rest[iou <= iou_threshold]
-    return boxes[keep]
+    return np.array(keep, dtype=int)
 
 
 def merge_tile_detections(

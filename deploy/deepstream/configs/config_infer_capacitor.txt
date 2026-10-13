@@ -1,0 +1,32 @@
+# nvinfer: capacitor detector (YOLOv8) on the tiles prepared by nvdspreprocess.
+# Paths are relative to this file. Model files are produced by setup.sh.
+
+[property]
+gpu-id=0
+gie-unique-id=1
+process-mode=1
+network-type=0
+# tensors come from nvdspreprocess (one per ROI)
+input-tensor-from-meta=1
+batch-size=9
+net-scale-factor=0.0039215697906911373
+model-color-format=0
+maintain-aspect-ratio=1
+symmetric-padding=1
+onnx-file=../models/capacitor_detector.onnx
+# built by TensorRT on first run (takes several minutes), then reused
+model-engine-file=../models/capacitor_detector.onnx_b9_gpu0_fp16.engine
+# 0 = FP32, 1 = INT8 (needs calibration), 2 = FP16
+network-mode=2
+labelfile-path=../models/labels.txt
+num-detected-classes=2
+interval=0
+cluster-mode=2
+parse-bbox-func-name=NvDsInferParseYolo
+custom-lib-path=../DeepStream-Yolo/nvdsinfer_custom_impl_Yolo/libnvdsinfer_custom_impl_Yolo.so
+engine-create-func-name=NvDsInferYoloCudaEngineGet
+
+[class-attrs-all]
+pre-cluster-threshold=0.25
+nms-iou-threshold=0.45
+topk=300

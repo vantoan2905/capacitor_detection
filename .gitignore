@@ -20,3 +20,9 @@ runs/
 *.zip
 *.xlsx
 *.bmp
+
+# DeepStream build artefacts
+deploy/deepstream/DeepStream-Yolo/
+deploy/deepstream/models/
+*.engine
+*.onnx

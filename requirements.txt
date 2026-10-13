@@ -1,0 +1,2 @@
+# Installs the package with every extra; equivalent to: pip install -e ".[yolo,frcnn,dev]"
+-e .[yolo,frcnn,dev]

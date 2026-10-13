@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "capacitor-detection"
+version = "0.1.0"
+description = "Capacitor detection on tray images with YOLO and Faster R-CNN"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy",
+    "pandas",
+    "openpyxl",
+    "opencv-python",
+    "pyyaml",
+]
+
+[project.optional-dependencies]
+yolo = ["ultralytics", "labelme2yolo"]
+frcnn = ["torch", "torchvision", "pillow"]
+dev = ["pytest", "ruff"]
+
+[project.scripts]
+capdet = "capacitor_detection.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 120
+src = ["src"]

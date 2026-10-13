@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data, weights and training outputs (kept local, not in git)
+data/*
+!data/README.md
+runs/
+*.pt
+*.pth
+*.rar
+*.zip
+*.xlsx
+*.bmp

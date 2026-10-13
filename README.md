@@ -13,6 +13,7 @@ A torchvision Faster R-CNN baseline is included as well.
 ```
 .
 ├── configs/                  # Ultralytics training configs (+ models/ architecture YAMLs)
+├── deploy/deepstream/        # DeepStream / TensorRT inference pipeline
 ├── data/                     # local only, git-ignored (see data/README.md)
 ├── notebooks/legacy/         # original exploration notebooks, kept for reference
 ├── src/capacitor_detection/
@@ -87,6 +88,11 @@ capdet train configs/capacitor_detector.yaml --epochs 30 --device 0
 capdet predict runs/capacitor_detector/train/weights/best.pt data/interim/test_tiles --conf 0.5 --iou 0.3 --save-txt
 capdet merge-tiles runs/detect/predict data/interim/merged      # only for --mode fixed tiles
 ```
+
+### Deployment with DeepStream
+
+See [deploy/deepstream/README.md](deploy/deepstream/README.md) for running the capacitor detector with
+NVIDIA DeepStream / TensorRT on full-resolution frames.
 
 ### Faster R-CNN baseline (Pascal VOC data)
 
